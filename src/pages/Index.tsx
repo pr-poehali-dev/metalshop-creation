@@ -1,7 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 import Icon from "@/components/ui/icon";
+import { useState, useEffect } from "react";
 
 export default function Index() {
   const products = [
@@ -34,11 +39,11 @@ export default function Index() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm sticky top-0 z-50">
+      <header className="bg-white/95 backdrop-blur-sm shadow-soft sticky top-0 z-50 transition-all duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
-            <div className="flex items-center space-x-4">
-              <div className="w-10 h-10 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center">
+            <div className="flex items-center space-x-4 animate-fade-in">
+              <div className="w-10 h-10 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center shadow-glow hover:scale-110 transition-transform duration-300">
                 <Icon name="Wrench" size={24} className="text-white" />
               </div>
               <div>
@@ -47,12 +52,12 @@ export default function Index() {
               </div>
             </div>
             <nav className="hidden md:flex space-x-8">
-              <a href="#catalog" className="text-gray-700 hover:text-primary transition-colors">Каталог</a>
-              <a href="#about" className="text-gray-700 hover:text-primary transition-colors">О нас</a>
-              <a href="#delivery" className="text-gray-700 hover:text-primary transition-colors">Доставка</a>
-              <a href="#contacts" className="text-gray-700 hover:text-primary transition-colors">Контакты</a>
+              <a href="#catalog" className="relative text-gray-700 hover:text-primary transition-all duration-300 hover:scale-105 after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-primary after:left-0 after:-bottom-1 after:scale-x-0 after:origin-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-left">Каталог</a>
+              <a href="#about" className="relative text-gray-700 hover:text-primary transition-all duration-300 hover:scale-105 after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-primary after:left-0 after:-bottom-1 after:scale-x-0 after:origin-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-left">О нас</a>
+              <a href="#delivery" className="relative text-gray-700 hover:text-primary transition-all duration-300 hover:scale-105 after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-primary after:left-0 after:-bottom-1 after:scale-x-0 after:origin-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-left">Доставка</a>
+              <a href="#contacts" className="relative text-gray-700 hover:text-primary transition-all duration-300 hover:scale-105 after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-primary after:left-0 after:-bottom-1 after:scale-x-0 after:origin-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-left">Контакты</a>
             </nav>
-            <Button>
+            <Button className="hover:shadow-hover transition-all duration-300 hover:scale-105">
               <Icon name="ShoppingCart" size={16} className="mr-2" />
               Корзина
             </Button>
@@ -61,9 +66,10 @@ export default function Index() {
       </header>
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-primary via-gray-700 to-secondary text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
+      <section className="bg-gradient-to-r from-primary via-gray-700 to-secondary text-white py-20 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-black/20"></div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="text-center animate-fade-in-up">
             <h1 className="text-4xl md:text-6xl font-bold mb-6">
               Металлоизделия
               <span className="block text-3xl md:text-5xl mt-2 opacity-90">для ЖКХ</span>
@@ -71,15 +77,42 @@ export default function Index() {
             <p className="text-xl md:text-2xl mb-8 opacity-90 max-w-3xl mx-auto">
               Профессиональные решения для коммунального хозяйства. Качество, надежность, быстрая доставка.
             </p>
-            <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <Button size="lg" variant="outline" className="text-white border-white hover:bg-white hover:text-primary">
+            <div className="flex flex-col sm:flex-row justify-center gap-4 animate-bounce-gentle">
+              <Button size="lg" variant="outline" className="text-white border-white hover:bg-white hover:text-primary hover:shadow-hover transition-all duration-300 hover:scale-105">
                 <Icon name="Catalog" fallback="Grid3X3" size={20} className="mr-2" />
                 Смотреть каталог
               </Button>
-              <Button size="lg" className="bg-white text-primary hover:bg-gray-100">
-                <Icon name="Phone" size={20} className="mr-2" />
-                Получить консультацию
-              </Button>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button size="lg" className="bg-white text-primary hover:bg-gray-100 hover:shadow-hover transition-all duration-300 hover:scale-105">
+                    <Icon name="Phone" size={20} className="mr-2" />
+                    Получить консультацию
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px]">
+                  <DialogHeader>
+                    <DialogTitle>Оставьте заявку</DialogTitle>
+                    <DialogDescription>
+                      Наш специалист свяжется с вами в течение 15 минут
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="grid gap-4 py-4">
+                    <div className="grid gap-2">
+                      <Label htmlFor="name">Ваше имя</Label>
+                      <Input id="name" placeholder="Иван Иванов" />
+                    </div>
+                    <div className="grid gap-2">
+                      <Label htmlFor="phone">Телефон</Label>
+                      <Input id="phone" placeholder="+7 (999) 123-45-67" />
+                    </div>
+                    <div className="grid gap-2">
+                      <Label htmlFor="message">Комментарий</Label>
+                      <Textarea id="message" placeholder="Опишите вашу задачу..." />
+                    </div>
+                  </div>
+                  <Button className="w-full">Отправить заявку</Button>
+                </DialogContent>
+              </Dialog>
             </div>
           </div>
         </div>
@@ -88,7 +121,7 @@ export default function Index() {
       {/* Catalog Section */}
       <section id="catalog" className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <div className="text-center mb-16 animate-fade-in-up">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               Каталог продукции
             </h2>
@@ -97,9 +130,9 @@ export default function Index() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 animate-fade-in">
             {products.map((product) => (
-              <Card key={product.id} className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+              <Card key={product.id} className="group hover:shadow-hover transition-all duration-500 hover:-translate-y-2 hover:scale-105 cursor-pointer animate-fade-in-up">
                 <div className="aspect-square overflow-hidden rounded-t-lg">
                   <img
                     src={product.image}
@@ -118,17 +151,47 @@ export default function Index() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Button className="w-full">
-                    <Icon name="ShoppingCart" size={16} className="mr-2" />
-                    В корзину
-                  </Button>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button className="w-full hover:shadow-hover transition-all duration-300 hover:scale-105">
+                        <Icon name="Eye" size={16} className="mr-2" />
+                        Подробнее
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-[500px]">
+                      <DialogHeader>
+                        <DialogTitle>{product.name}</DialogTitle>
+                        <DialogDescription>{product.description}</DialogDescription>
+                      </DialogHeader>
+                      <div className="grid gap-4 py-4">
+                        <img src={product.image} alt={product.name} className="w-full h-64 object-cover rounded-lg" />
+                        <div className="flex justify-between items-center">
+                          <Badge variant="secondary">{product.category}</Badge>
+                          <span className="text-2xl font-bold text-primary">{product.price}</span>
+                        </div>
+                        <p className="text-gray-600">
+                          Профессиональное оборудование для коммунального хозяйства. Качество подтверждено сертификатами и многолетним опытом эксплуатации.
+                        </p>
+                      </div>
+                      <div className="flex gap-2">
+                        <Button className="flex-1">
+                          <Icon name="ShoppingCart" size={16} className="mr-2" />
+                          В корзину
+                        </Button>
+                        <Button variant="outline" className="flex-1">
+                          <Icon name="Phone" size={16} className="mr-2" />
+                          Заказать звонок
+                        </Button>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
                 </CardContent>
               </Card>
             ))}
           </div>
 
-          <div className="text-center mt-12">
-            <Button size="lg" variant="outline">
+          <div className="text-center mt-12 animate-bounce-gentle">
+            <Button size="lg" variant="outline" className="hover:shadow-hover transition-all duration-300 hover:scale-105">
               <Icon name="Eye" size={20} className="mr-2" />
               Посмотреть весь каталог
             </Button>
@@ -139,39 +202,39 @@ export default function Index() {
       {/* Features Section */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <div className="text-center mb-16 animate-fade-in-up">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               Почему выбирают нас
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 animate-fade-in">
+            <div className="text-center group hover:scale-105 transition-all duration-300">
+              <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4 shadow-soft group-hover:shadow-glow transition-all duration-300">
                 <Icon name="Award" size={32} className="text-white" />
               </div>
               <h3 className="text-xl font-semibold mb-2">Качество</h3>
               <p className="text-gray-600">Сертифицированная продукция от проверенных производителей</p>
             </div>
             
-            <div className="text-center">
-              <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+            <div className="text-center group hover:scale-105 transition-all duration-300">
+              <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4 shadow-soft group-hover:shadow-glow transition-all duration-300">
                 <Icon name="Truck" size={32} className="text-white" />
               </div>
               <h3 className="text-xl font-semibold mb-2">Быстрая доставка</h3>
               <p className="text-gray-600">Доставим в любую точку России в кратчайшие сроки</p>
             </div>
             
-            <div className="text-center">
-              <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+            <div className="text-center group hover:scale-105 transition-all duration-300">
+              <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4 shadow-soft group-hover:shadow-glow transition-all duration-300">
                 <Icon name="Users" size={32} className="text-white" />
               </div>
               <h3 className="text-xl font-semibold mb-2">Опыт</h3>
               <p className="text-gray-600">Более 15 лет на рынке металлоизделий для ЖКХ</p>
             </div>
             
-            <div className="text-center">
-              <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+            <div className="text-center group hover:scale-105 transition-all duration-300">
+              <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4 shadow-soft group-hover:shadow-glow transition-all duration-300">
                 <Icon name="HeadphonesIcon" fallback="Headphones" size={32} className="text-white" />
               </div>
               <h3 className="text-xl font-semibold mb-2">Поддержка</h3>
